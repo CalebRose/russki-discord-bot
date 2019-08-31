@@ -1,0 +1,27 @@
+{
+  "name": "russki-discord-bot",
+  "version": "1.0.0",
+  "description": "A Discord Bot that translates text to Russian",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CalebRose/russki-discord-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CalebRose/russki-discord-bot/issues"
+  },
+  "homepage": "https://github.com/CalebRose/russki-discord-bot#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "discord": "^0.8.2",
+    "discord.js": "github:discordjs/discord.js",
+    "dotenv": "^8.1.0",
+    "enmap": "^5.1.2"
+  }
+}
