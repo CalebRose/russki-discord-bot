@@ -1,40 +1,37 @@
 require("dotenv").config();
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const axios = require("axios");
+const Enmap = require("enmap");
+const fs = require("fs");
+client.config = process.env;
 
 client.on("ready", () => {
   console.log("Я готовлю!");
+  client.user.setActivity("Привет!");
 });
 
-// client.on("message", message => {
-//   if (message.content.startsWith("ping")) {
-//     message.channel.send("pong!");
-//   }
-// });
-
-const prefix = "!";
-
-client.on("message", msg => {
-  if (msg.author.id === "189543659912298497") {
-    msg.reply("Sure thing, bread boi.");
-    return;
-  } else if (msg.author.bot || msg.author.id !== process.env.USER_ID) return;
-  else {
-    axios
-      .get("https://translate.yandex.net/api/v1.5/tr.json/translate", {
-        params: {
-          key: process.env.YANDEX_API_KEY,
-          text: msg.content,
-          lang: "ru"
-        }
-      })
-      .then(res => {
-        if (res.data.text[0] !== msg.content) {
-          msg.reply(res.data.text[0]);
-        }
-      });
-  }
+fs.readdir("./events/", (err, files) => {
+  if (err) return console.log(err);
+  files.forEach(file => {
+    const event = require(`./events/${file}`);
+    let eventName = file.split(".")[0];
+    client.on(eventName, event.bind(null, client));
+  });
 });
 
+client.commands = new Enmap();
+
+fs.readdir("./commands", (err, files) => {
+  if (err) return console.error(err);
+  files.forEach(file => {
+    if (!file.endsWith(".js")) return;
+    let props = require(`./commands/${file}`);
+    let commandName = file.split(".")[0];
+    console.log(`Attempting to load command ${commandName}`);
+    client.commands.set(commandName, props);
+  });
+});
+client.on("error", e => console.log(e));
+client.on("warn", e => console.log(e));
+client.on("debug", e => console.log(e));
 client.login(process.env.BOT_TOKEN);
